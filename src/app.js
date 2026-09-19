@@ -69,8 +69,20 @@
     return map[variant] || ('the-' + variant + '.html');
   }
 
+  /* The body is already in the document when ops/make_deploy.py baked it in,
+     which is the normal case in production. Only a guest who needs the OTHER
+     variant costs a request, and that only happens when the Variant column is
+     being honoured. */
+  function bakedSheet(variant) {
+    var main = document.getElementById('invitation');
+    var sheet = main && main.querySelector('.sheet');
+    if (!sheet) return null;
+    var baked = cfg.BAKED_VARIANT || document.body.getAttribute('data-baked-variant');
+    return (!baked || baked === variant) ? sheet : null;
+  }
+
   function loadBody(variant) {
-    return fetch(cfg.CONTENT_BASE + contentFile(variant), { cache: 'no-store' })
+    return fetch(cfg.CONTENT_BASE + contentFile(variant), { cache: 'default' })
       .then(function (r) {
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.text();
@@ -115,6 +127,7 @@
       if (i) node.appendChild(document.createElement('br'));
       node.appendChild(l);
     });
+    node.classList.add('is-ready');       // it holds a name now; let it show
   }
 
   /* The sheet carries its own claim block, which is the placeholder this whole
@@ -180,23 +193,55 @@
   function render(profile, token) {
     var main = document.getElementById('invitation');
     var variant = variantFor(profile);
+    var already = bakedSheet(variant);
+
+    function place(sheet) {
+      personaliseHeader(sheet, profile);
+      dropSheetClaim(sheet);
+      if (sheet.parentNode !== main) {
+        main.textContent = '';
+        main.appendChild(sheet);
+      }
+      var confirm = buildConfirm(profile, token);
+      confirm.id = 'confirm-block';
+      var old = document.getElementById('confirm-block');
+      if (old) old.parentNode.replaceChild(confirm, old);
+      else main.appendChild(confirm);
+      document.body.setAttribute('data-variant', variant);
+      document.body.setAttribute('data-state',
+        !profile ? 'generic' : (profile.confirmed ? 'confirmed' : 'invited'));
+    }
+
+    if (already) { place(already); return Promise.resolve(); }
 
     return loadBody(variant).then(function (htmlText) {
       var holder = document.createElement('div');
       holder.innerHTML = htmlText;
       var sheet = holder.querySelector('.sheet');
       if (!sheet) throw new Error('no .sheet in ' + variant + '.html');
-
-      personaliseHeader(sheet, profile);
-      dropSheetClaim(sheet);
-
-      main.textContent = '';
-      main.appendChild(sheet);
-      main.appendChild(buildConfirm(profile, token));
-      document.body.setAttribute('data-variant', variant);
-      document.body.setAttribute('data-state',
-        !profile ? 'generic' : (profile.confirmed ? 'confirmed' : 'invited'));
+      place(sheet);
     });
+  }
+
+  /* The only thing the Web App can tell us that the baked file could not is
+     that this guest has confirmed since the deploy. When it says so, the
+     confirmation block is rebuilt and nothing else on the page moves. */
+  function revalidate(res, token) {
+    if (!res || !res.revalidate) return;
+    res.revalidate.then(function (fresh) {
+      if (!fresh || !fresh.found || !fresh.profile) return;
+      if (fresh.profile.confirmed === (res.profile && res.profile.confirmed)) return;
+      render(fresh.profile, token);
+    }).catch(function () { /* the page is already correct enough */ });
+  }
+
+  /* Only ever shown when there is nothing else to show. */
+  function showFallback(token) {
+    var main = document.getElementById('invitation');
+    if (main.querySelector('.sheet')) return;
+    main.textContent = '';
+    main.appendChild(buildConfirm(null, token));
+    document.body.setAttribute('data-state', 'fallback');
   }
 
   function boot() {
@@ -217,17 +262,12 @@
            never gates the render — it is sent after the page is on screen. */
         return render(profile, token).then(function () {
           if (profile) window.InviteTrack.send(token, 'viewed');
+          revalidate(res, token);
         });
       })
       .catch(function (err) {
-        /* Last resort: the body could not be fetched at all. Put the
-           confirmation block up on its own rather than show an empty page or
-           an error, and leave the trace in the console, for us. */
         if (window.console) console.warn('[invite] body unavailable:', err);
-        var main = document.getElementById('invitation');
-        main.textContent = '';
-        main.appendChild(buildConfirm(null, token));
-        document.body.setAttribute('data-state', 'fallback');
+        showFallback(token);
       });
   }
 

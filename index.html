@@ -9,6 +9,7 @@
 <meta name="description" content="A private invitation to the Contextful Summit, October 5–6, 2026, San Francisco.">
 
 <!-- The design system. Never edited here; re-copied by ops/sync_kit.sh. -->
+<link rel="preconnect" href="https://script.google.com" crossorigin>
 <link rel="stylesheet" href="assets/kit/styles.css">
 <link rel="stylesheet" href="assets/css/invite.css">
 <link rel="icon" href="assets/kit/assets/logo/brandmark-focused.svg" type="image/svg+xml">
@@ -24,17 +25,168 @@
     <span class="dateline">October 5–6, 2026 · San Francisco</span>
   </header>
 
-  <!-- src/app.js replaces everything inside #invitation with the sheet and the
-       confirmation block. What is written here is what stands if it never gets
-       to: no JavaScript, or a fetch that fails. Never an empty page, never a
-       404, never an error message in a guest's face. -->
-  <main id="invitation">
+  <!-- The invitation body is BAKED IN HERE at deploy time by ops/make_deploy.py,
+       which replaces the marker below with the active variant. That is the whole
+       reason the page feels instant: the thing the guest came to read is in the
+       first response and needs no request of its own.
+
+       src/app.js then fills the personalised line and appends the confirmation
+       block. It never paints anything provisional — a fallback that flashes for
+       half a second and is then replaced reads as a broken page, so the fallback
+       lives in <noscript> and in a failure path, and nowhere else. -->
+  <main id="invitation"><div class="sheet">
+
+  <header>
+    <span class="stamp">PRIVATE INVITATION · NOT FOR CIRCULATION</span>
+    <p class="addressee">Prepared for <strong>{{FULL_NAME}}</strong>{{ORG_SUFFIX}}<br>Put forward by <strong>{{CONNECTOR}}</strong></p>
+    <h1>The missing half of intelligence.</h1>
+    <p class="standfirst">Two days in San Francisco. Seven sessions, and one experiment run in front of you.</p>
+    <dl class="vitals">
+      <div><dt>Dates</dt><dd class="v-val">October 5–6, 2026<br>inside SF Tech Week</dd></div>
+      <div><dt>Place</dt><dd class="v-val">Presidio Golf Course<br>San Francisco</dd></div>
+      <div><dt>Room</dt><dd class="v-val">50 seats<br>invitation only</dd></div>
+      <div><dt>On stage</dt><dd class="v-val">Victor Chapela<br>Nathaly Rey<br>Cesar Andres Lopez<br>Jose Antonio Tena Sendra</dd></div>
+    </dl>
+  </header>
+
+  <section>
+    <div class="eyebrow">Who is on stage</div>
+    <h2>Seven sessions, no press, and the people in them saying what they do not say publicly.</h2>
+    <div class="itinerary">
+      <table>
+        <thead>
+          <tr><th>When</th><th>Session</th><th>On stage</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class='when'>Oct 5 · 10:40</td><td class='what'>I. The AI moment: setting the stakes</td><td>Victor Chapela</td></tr>
+          <tr><td class='when'>Oct 5 · 11:00</td><td class='what'>II. AI sovereignty: innovation, compliance and control</td><td>Nathaly Rey · ministers and policy makers</td></tr>
+          <tr><td class='when'>Oct 5 · 13:00</td><td class='what'>III. Managing legacy and large repositories</td><td>Cesar Andres Lopez · Globant · enterprise CTOs</td></tr>
+          <tr><td class='when'>Oct 5 · 14:05</td><td class='what'>IV. Tokenomics</td><td>Jose Antonio Tena Sendra, Globant</td></tr>
+          <tr><td class='when'>Oct 5 · 15:10</td><td class='what'>V. The Contextful keynote, the reveal and the live run</td><td>Victor Chapela</td></tr>
+          <tr><td class='when'>Oct 6 · 14:55</td><td class='what'>VI. Building the future of intelligence</td><td>Founders</td></tr>
+          <tr><td class='when'>Oct 6 · 16:00</td><td class='what'>VII. Where does value go when intelligence is abundant?</td><td>Contextful investors</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="lead">Underneath all seven is the same problem.</p>
+  </section>
+
+  <section>
+    <div class="eyebrow">The problem</div>
+    <h2>Companies are buying the same knowledge twice, and the invoice shows it.</h2>
+    <p class="lead">Every day agents burn tokens rereading the same code, the same systems, the same decisions — company know-how, kept in fossil form. The deeper the adoption, the faster the spend climbs.</p>
+    <div class="colset">
+      <div class="box">
+        <b>It is paid again</b>
+        <p>The same understanding, bought twice. Once in company salaries. Again on AI per task.</p>
+      </div>
+      <div class="box">
+        <b>Nothing is gained</b>
+        <p>The year ends with the AI knowing exactly what it knew when it began. Nothing spent on it compounds.</p>
+      </div>
+      <div class="box">
+        <b>It is a loss</b>
+        <p>Specific know-how trains a model customers do not own, and walks out when the engineer does.</p>
+      </div>
+    </div>
+    <div class="stands">
+      <p><strong>Nothing spent on it accumulates. That is the reread tax, and it is metered.</strong></p>
+    </div>
+    <div class="deck">
+      <div class="box">
+        <b>Why a better model does not fix it</b>
+        <p>A stronger model rebuilds your context faster. It still rebuilds it. Quality sets the price of the rebuild, not whether there is one. We sit above whichever model you buy — no bet on which lab wins.</p>
+      </div>
+      <div class="box">
+        <b>What two years of AI budgets bought</b>
+        <p>Rising spend has returned less than promised almost everywhere. Not too early, not too slow — most of the money goes to code, and most of those tokens to rereading context the agent had yesterday.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">What happens live</div>
+    <h2>October 5, 15:10. Contextful is what stops it. One real task, run live, with the token count on screen.</h2>
+    <ul class="consequences">
+      <li>
+        <span class="c-key">The task</span>
+        <span class="c-body">One complex problem to solve. The same one for both sides.</span>
+      </li>
+      <li>
+        <span class="c-key">The setup</span>
+        <span class="c-body">Our layer on a basic open-source model, against the frontier labs. Ordinary hardware. Live, and auditable from the floor.</span>
+      </li>
+      <li>
+        <span class="c-key">The result</span>
+        <span class="c-body">Nothing gets reread, because the know-how is already kept, so the token count collapses to a fraction of what the same task costs you today.</span>
+      </li>
+    </ul>
+    <p>The model did not get smarter. It stopped rediscovering what the organization already knew.</p>
+    <div class="stands">
+      <p><strong>The tokens do not get cheaper. They stop being spent.</strong></p>
+    </div>
+  </section>
+
+  <section class="has-rail rail-right">
+    <div class="eyebrow">Access</div>
+    <h2>Fifty seats, and it is the fifty that matter.</h2>
+    <div class="col-main">
+      <p class="lead">No middle management. No press.</p>
+      <div class="itinerary">
+        <table>
+          <thead>
+            <tr><th>When</th><th>What</th><th>Where</th></tr>
+          </thead>
+          <tbody>
+            <tr><td class='when'>Oct 5 · 10:00–15:00</td><td class='what'>Discussion Panels [I to IV] + lunch</td><td>Presidio</td></tr>
+            <tr><td class='when'>Oct 5 · 15:00</td><td class='what'>Key note + The live run [V]</td><td>Presidio</td></tr>
+            <tr><td class='when'>Oct 5 · 18:00</td><td class='what'>Private dinner, and the smaller conversations</td><td>Presidio</td></tr>
+            <tr><td class='when'>Oct 6 · 10:00</td><td class='what'>Private golf, twenty guests</td><td>Presidio</td></tr>
+            <tr><td class='when'>Oct 6 · 15:00–17:00</td><td class='what'>Sessions [VI &amp; VII]</td><td>Presidio</td></tr>
+            <tr><td class='when'>Oct 6 · 18:30</td><td class='what'>VIP dinner, then the launch party on the flight deck</td><td>USS Hornet</td></tr>
+            <tr><td class='when'>Oct 7</td><td class='what'>SF Tech Week, open across the city</td><td>San Francisco</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <aside class="rail">
+      <div class="box">
+        <b>The room</b>
+        <p>The people who decide how AI enters an industry or a country: chief executives and boards, leadership of governmental governance authorities, top-tier funds, and the integrators running the world&#x27;s largest AI programmes for other people.</p>
+      </div>
+    </aside>
+    <div class="col-tail">
+      <div class="stands">
+        <p><strong>The organizations in this room start in October. The ones that are not will spend the quarter working out what happened.</strong></p>
+      </div>
+      <p>Your seat is held under a code issued to you alone.</p>
+      <div class="rsvp">
+        <div class="claim">
+        <a class="claim-link" href="#">{{INVITE_LINK_LABEL}}</a>
+        <div class="claim-code"><span>Invite code</span> <b>{{INVITE_CODE}}</b></div>
+      </div>
+        <p>You leave with terms, or you leave unconvinced — both are useful to us.</p>
+        <p>Arrive October 4, leave October 7. Transport provided between venues. Plus ones for the party on request. <a href="mailto:info@contextful.com">info@contextful.com</a></p>
+        <div class="seats">50 seats · invitation only</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="close">
+    <p>Models remember knowledge. Contextful learns know-how. And that know-how is yours.</p>
+    <div class="sign">Victor Chapela · Founder, Contextful</div>
+  </div>
+
+</div>
+</main>
+
+  <noscript>
     <section class="confirm">
       <span class="label">Contextful Summit</span>
       <p>October 5&#8211;6, 2026. Presidio Golf Course, San Francisco. By invitation.</p>
       <a class="btn" href="https://contextful.com/apply/">Apply for a seat</a>
     </section>
-  </main>
+  </noscript>
 
   <footer class="foot">
     <p class="note">Private invitation. Not for circulation.</p>

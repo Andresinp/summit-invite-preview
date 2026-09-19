@@ -105,7 +105,14 @@ body {
 }
 
 /* A.1 — the personalised line. Rebuilt from data by src/app.js, which drops a
-   line rather than printing an empty one. */
+   line rather than printing an empty one.
+
+   It starts invisible and is revealed once it holds a name. The body around it
+   is already on screen, so the alternative is a line of merge tokens or an
+   empty slot flashing before the name lands. `visibility` rather than
+   `display`: the space is held, so nothing below it jumps. */
+.addressee { visibility: hidden; }
+.addressee.is-ready { visibility: visible; }
 .addressee {
   font: var(--type-caption);
   color: var(--text-secondary);

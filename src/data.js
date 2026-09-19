@@ -55,30 +55,46 @@ window.InviteData = (function () {
   /* --- source: the Google Sheet, through the Apps Script Web App ---------- */
 
   function fromSheet(token, cfg) {
-    var tries = [];
-    if (cfg.WEB_APP_URL) {
-      tries.push(function () {
-        return get(cfg.WEB_APP_URL + (cfg.WEB_APP_URL.indexOf('?') < 0 ? '?' : '&') +
-                   'token=' + encodeURIComponent(token))
-          .then(function (d) {
-            if (!d || d.found === false || !d.profile) return NOT_FOUND;
-            return { found: true, profile: fromRow(d.profile) };
-          });
-      });
-    }
-    /* Dev fallback: the same rows as a static file, so the landing can be
-       built and tested with no network and no deployment at all. */
-    if (cfg.MOCK_FALLBACK_URL) {
-      tries.push(function () {
-        return get(cfg.MOCK_FALLBACK_URL).then(function (rows) {
-          var hit = (rows || []).filter(function (r) {
-            return str(r[FIELD.token]) === token;
-          })[0];
-          return hit ? { found: true, profile: fromRow(hit) } : NOT_FOUND;
+    /* ORDER MATTERS, and it is the difference between a page that feels
+       instant and one that visibly waits.
+
+       The baked guest file sits on the same CDN as the page, is a couple of
+       kilobytes, and answers in the time of one cached request. The Apps
+       Script Web App answers in hundreds of milliseconds on a good day, over
+       a redirect, and on a phone it is the slowest thing in the whole chain.
+
+       So the static file goes first and the page renders from it. The Web App
+       is then asked in the BACKGROUND, and only one thing can come back that
+       the static file could not know: that this guest has since confirmed.
+       When it does, `onRevalidate` swaps the confirmation block and nothing
+       else. Stale, then correct, beats correct-but-late. */
+    var live = function () {
+      if (!cfg.WEB_APP_URL) return Promise.resolve(NOT_FOUND);
+      return get(cfg.WEB_APP_URL + (cfg.WEB_APP_URL.indexOf('?') < 0 ? '?' : '&') +
+                 'token=' + encodeURIComponent(token))
+        .then(function (d) {
+          if (!d || d.found === false || !d.profile) return NOT_FOUND;
+          return { found: true, profile: fromRow(d.profile) };
         });
+    };
+
+    var baked = function () {
+      if (!cfg.GUESTS_URL) return Promise.resolve(NOT_FOUND);
+      return get(cfg.GUESTS_URL).then(function (rows) {
+        var hit = (rows || []).filter(function (r) {
+          return str(r[FIELD.token]) === token;
+        })[0];
+        return hit ? { found: true, profile: fromRow(hit) } : NOT_FOUND;
       });
-    }
-    return chain(tries);
+    };
+
+    return baked().catch(function () { return NOT_FOUND; }).then(function (res) {
+      if (res && res.found) {
+        res.revalidate = live().catch(function () { return NOT_FOUND; });
+        return res;
+      }
+      return live().catch(function () { return NOT_FOUND; });
+    });
   }
 
   /* --- source: Airtable, through the endpoints that already exist ---------
