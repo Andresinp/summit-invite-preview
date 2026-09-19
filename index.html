@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contextful Summit — invitation</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="A private invitation to the Contextful Summit, October 5–6, 2026, San Francisco.">
+
+<!-- The design system. Never edited here; re-copied by ops/sync_kit.sh. -->
+<link rel="stylesheet" href="assets/kit/styles.css">
+<link rel="stylesheet" href="assets/css/invite.css">
+<link rel="icon" href="assets/kit/assets/logo/brandmark-focused.svg" type="image/svg+xml">
+</head>
+<body>
+
+<div class="page">
+
+  <header class="masthead">
+    <!-- §4: black on Calm and white, white on Night. Nothing else. -->
+    <img class="logo-on-light" src="assets/kit/assets/logo/lockup-horizontal-black.svg" alt="Contextful">
+    <img class="logo-on-dark"  src="assets/kit/assets/logo/lockup-horizontal-white.svg" alt="Contextful">
+    <span class="dateline">October 5–6, 2026 · San Francisco</span>
+  </header>
+
+  <!-- src/app.js replaces everything inside #invitation with the sheet and the
+       confirmation block. What is written here is what stands if it never gets
+       to: no JavaScript, or a fetch that fails. Never an empty page, never a
+       404, never an error message in a guest's face. -->
+  <main id="invitation">
+    <section class="confirm">
+      <span class="label">Contextful Summit</span>
+      <p>October 5&#8211;6, 2026. Presidio Golf Course, San Francisco. By invitation.</p>
+      <a class="btn" href="https://contextful.com/apply/">Apply for a seat</a>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p class="note">Private invitation. Not for circulation.</p>
+    <p><a href="mailto:info@contextful.com">info@contextful.com</a></p>
+  </footer>
+
+</div>
+
+<script src="config.js"></script>
+<script src="src/strings.js"></script>
+<script src="src/token.js"></script>
+<script src="src/track.js"></script>
+<script src="src/data.js"></script>
+<script src="src/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+:root{
+/* Brand core — named per the Contextful palette sheet */
+--ctx-focused-ink:#0A0621;
+--ctx-focused:#4318B8;
+--ctx-focused-bright:#8766FF;
+--ctx-calm:#F0F0F0;
+--ctx-calm-tint:#EAE9FC;
+--ctx-deep:#DF7864;
+--ctx-geek:#B9C4EC;
+--ctx-ground:#73014B;
+--ctx-night:#121212;
+--ctx-white:#FFFFFF;
+/* Derived tints (mixes of core colors; not on the sheet) */
+--ctx-focused-soft:#ECE6FA;
+--ctx-focused-deep:#2B0E7D;
+--ctx-deep-soft:#FBE9E4;
+--ctx-ground-soft:#F4E0EC;
+--ctx-geek-soft:#E9EDF9;
+/* Neutral ramp (cool, tinted toward Focused ink) */
+--ctx-neutral-50:#F7F7F9;
+--ctx-neutral-100:#F0F0F0;
+--ctx-neutral-200:#E2E1E8;
+--ctx-neutral-300:#C9C7D3;
+--ctx-neutral-400:#A09DB0;
+--ctx-neutral-500:#77738A;
+--ctx-neutral-600:#575368;
+--ctx-neutral-700:#3B3849;
+--ctx-neutral-800:#25222F;
+--ctx-neutral-900:#121212;
+/* Semantic — light theme (default) */
+--bg-page:var(--ctx-calm);
+--bg-surface:var(--ctx-white);
+--bg-surface-2:var(--ctx-neutral-50);
+--bg-inverse:var(--ctx-focused-ink);
+--bg-accent:var(--ctx-focused);
+--bg-accent-hover:#3A15A0;
+--bg-accent-active:#2B0E7D;
+--bg-accent-soft:var(--ctx-focused-soft);
+--text-primary:var(--ctx-focused-ink);
+--text-secondary:var(--ctx-neutral-600);
+--text-tertiary:var(--ctx-neutral-500);
+--text-on-accent:var(--ctx-white);
+--text-accent:var(--ctx-focused);
+--text-inverse:var(--ctx-calm-tint);
+--border-subtle:var(--ctx-neutral-200);
+--border-default:var(--ctx-neutral-300);
+--border-strong:var(--ctx-focused-ink);
+--border-accent:var(--ctx-focused);
+--focus-ring:var(--ctx-focused-bright);
+--status-info:var(--ctx-geek);
+--status-info-text:#2B3E8C;
+--status-warning:var(--ctx-deep);
+--status-warning-soft:var(--ctx-deep-soft);
+--status-warning-text:#8E3A28;
+--status-danger:var(--ctx-ground);
+--status-danger-soft:var(--ctx-ground-soft);
+--status-danger-text:var(--ctx-ground);
+--status-success:#2E7D5B;
+--status-success-soft:#E1F2EA;
+--status-success-text:#1F5C42;
+--overlay-scrim:rgba(10,6,33,.55);
+/* Brand gradient (from the slide backgrounds) */
+--gradient-brand:linear-gradient(112deg,#73014B 0%,#B9C4EC 48%,#FFFFFF 72%,#DF7864 100%);/* @kind color */
+--gradient-brand-2:linear-gradient(135deg,#DF7864 0%,#FFF6EE 30%,#B9C4EC 55%,#73014B 100%);/* @kind color */
+--gradient-protect:linear-gradient(180deg,rgba(10,6,33,0) 0%,rgba(10,6,33,.6) 100%);/* @kind color */
+}
+[data-theme="light"],[data-theme="light"] body{
+--bg-page:var(--ctx-calm);--bg-surface:var(--ctx-white);--bg-surface-2:var(--ctx-neutral-50);--bg-inverse:var(--ctx-focused-ink);--bg-accent:var(--ctx-focused);--bg-accent-hover:#3A15A0;--bg-accent-active:#2B0E7D;--bg-accent-soft:var(--ctx-focused-soft);--text-primary:var(--ctx-focused-ink);--text-secondary:var(--ctx-neutral-600);--text-tertiary:var(--ctx-neutral-500);--text-on-accent:var(--ctx-white);--text-accent:var(--ctx-focused);--text-inverse:var(--ctx-calm-tint);--border-subtle:var(--ctx-neutral-200);--border-default:var(--ctx-neutral-300);--border-strong:var(--ctx-focused-ink);--border-accent:var(--ctx-focused);--focus-ring:var(--ctx-focused-bright);--status-info-text:#2B3E8C;--status-warning-soft:var(--ctx-deep-soft);--status-warning-text:#8E3A28;--status-danger-soft:var(--ctx-ground-soft);--status-danger-text:var(--ctx-ground);--status-success-soft:#E1F2EA;--status-success-text:#1F5C42;--overlay-scrim:rgba(10,6,33,.55);
+}
+[data-theme="dark"],[data-theme="dark"] body{
+--bg-page:var(--ctx-night);
+--bg-surface:#1A1A1D;
+--bg-surface-2:#222226;
+--bg-inverse:var(--ctx-calm-tint);
+--bg-accent:var(--ctx-focused-bright);
+--bg-accent-hover:#9B80FF;
+--bg-accent-active:#7452F2;
+--bg-accent-soft:#241C4A;
+--text-primary:var(--ctx-calm-tint);
+--text-secondary:#B4B1C4;
+--text-tertiary:#8A879B;
+--text-on-accent:var(--ctx-night);
+--text-accent:var(--ctx-focused-bright);
+--text-inverse:var(--ctx-focused-ink);
+--border-subtle:#2C2B33;
+--border-default:#3B3949;
+--border-strong:var(--ctx-calm-tint);
+--border-accent:var(--ctx-focused-bright);
+--focus-ring:var(--ctx-geek);
+--status-info-text:var(--ctx-geek);
+--status-warning-soft:#3A2420;
+--status-warning-text:#F0A08E;
+--status-danger-soft:#3A1030;
+--status-danger-text:#E27CBF;
+--status-success-soft:#173328;
+--status-success-text:#7FD1A9;
+--overlay-scrim:rgba(0,0,0,.7);
+}

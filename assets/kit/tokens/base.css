@@ -1,0 +1,13 @@
+/* Minimal element defaults so tokens paint without extra setup */
+html{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{margin:0;background:var(--bg-page);color:var(--text-primary);font:var(--type-body);letter-spacing:var(--tracking-body)}
+h1,h2,h3,h4{margin:0;color:var(--text-primary)}
+h1{font:var(--type-h1);letter-spacing:var(--tracking-display)}
+h2{font:var(--type-h2);letter-spacing:var(--tracking-display)}
+h3{font:var(--type-h3);letter-spacing:var(--tracking-heading)}
+h4{font:var(--type-h4);letter-spacing:var(--tracking-heading)}
+p{margin:0}
+a{color:var(--text-accent);text-decoration:none;transition:opacity var(--duration-fast) var(--ease-standard)}
+a:hover{opacity:.72}
+button,input,select,textarea{font:inherit;color:inherit}
+::selection{background:var(--ctx-geek);color:var(--ctx-focused-ink)}
