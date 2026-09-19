@@ -7,11 +7,11 @@ window.INVITE_CONFIG = {
   APPLY_BASE: 'https://contextful.com/apply/',
   API_BASE: 'https://contextful.com',
   APPLY_FALLBACK_TOKEN: '',
-  WEB_APP_URL: '',
+  WEB_APP_URL: 'https://script.google.com/macros/s/AKfycbwWs1jd-GQJGX-ggL3CslnqergqcQyf1DumkO_5Dxij1yQokPiapmrXogZ35R1dwrhW/exec',
   CONTENT_BASE: 'content/build/',
   CONTENT_FILES: { 'line-up': 'the-line-up.html', 'room': 'the-room.html' },
   HEADER_NAME: 'full',
-  TRACKING: false,
+  TRACKING: true,
   MOCK_FALLBACK_URL: 'data/guests.json',
   LOCALE: 'en',
 };
