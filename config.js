@@ -10,9 +10,9 @@ window.INVITE_CONFIG = {
   WEB_APP_URL: 'https://script.google.com/macros/s/AKfycbwWs1jd-GQJGX-ggL3CslnqergqcQyf1DumkO_5Dxij1yQokPiapmrXogZ35R1dwrhW/exec',
   CONTENT_BASE: 'content/build/',
   CONTENT_FILES: { 'line-up': 'the-line-up.html', 'room': 'the-room.html' },
-  BAKED_VARIANT: 'true',
+  BAKED_VARIANT: 'line-up',
   HEADER_NAME: 'full',
-  TRACKING: line-up,
+  TRACKING: true,
   GUESTS_URL: 'data/guests.json',
   LOCALE: 'en',
 };
