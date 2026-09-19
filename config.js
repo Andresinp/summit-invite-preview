@@ -6,7 +6,7 @@ window.INVITE_CONFIG = {
   COMPANIONS: 3,
   APPLY_BASE: 'https://contextful.com/apply/',
   API_BASE: 'https://contextful.com',
-  APPLY_FALLBACK_TOKEN: '',
+  APPLY_FALLBACK_TOKEN: 'kGgZHf9ZO8lqhhpbFcSm6o-YVEoRGaG1xvqZ1j9SLh0',
   WEB_APP_URL: 'https://script.google.com/macros/s/AKfycbwWs1jd-GQJGX-ggL3CslnqergqcQyf1DumkO_5Dxij1yQokPiapmrXogZ35R1dwrhW/exec',
   CONTENT_BASE: 'content/build/',
   CONTENT_FILES: { 'line-up': 'the-line-up.html', 'room': 'the-room.html' },
