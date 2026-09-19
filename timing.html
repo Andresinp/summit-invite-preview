@@ -1,0 +1,37 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>timing</title></head><body>
+<pre id="result">pending</pre>
+<script>
+// Loads the landing in an iframe and records when each thing actually appears:
+// first paint of the fallback, the sheet, and the confirmation block.
+var q = new URLSearchParams(location.search);
+var f = document.createElement('iframe');
+f.style.cssText = 'width:900px;height:2000px;border:0';
+var t0 = performance.now(), marks = {}, seen = {};
+f.src = q.get('u');
+document.body.appendChild(f);
+var iv = setInterval(function () {
+  var d;
+  try { d = f.contentDocument; } catch (e) { return; }
+  if (!d) return;
+  if (!seen.fallback && d.querySelector('#invitation .confirm')) {
+    // the boot fallback, before app.js has replaced anything
+    if (!d.querySelector('.sheet')) { seen.fallback = 1; marks.fallbackVisible = performance.now() - t0; }
+  }
+  if (!seen.sheet && d.querySelector('.sheet')) { seen.sheet = 1; marks.sheet = performance.now() - t0; }
+  if (!seen.code && d.querySelector('.code-plate .code')) { seen.code = 1; marks.confirmBlock = performance.now() - t0; }
+  if (seen.sheet && seen.code) {
+    clearInterval(iv);
+    marks.fallbackShownFor = seen.fallback ? Math.round(marks.sheet - marks.fallbackVisible) : 0;
+    Object.keys(marks).forEach(function (k) { marks[k] = Math.round(marks[k]); });
+    document.getElementById('result').textContent = JSON.stringify(marks);
+  }
+}, 25);
+setTimeout(function () {
+  if (document.getElementById('result').textContent === 'pending') {
+    clearInterval(iv);
+    Object.keys(marks).forEach(function (k) { marks[k] = Math.round(marks[k]); });
+    marks.timedOut = true;
+    document.getElementById('result').textContent = JSON.stringify(marks);
+  }
+}, 20000);
+</script></body></html>
