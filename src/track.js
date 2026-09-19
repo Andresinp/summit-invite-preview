@@ -23,9 +23,23 @@
 
 window.InviteTrack = (function () {
 
+  /* `?notrack=1` renders the page and writes nothing.
+
+     This exists because of a mistake. On 19 Sep the four rehearsal pages were
+     verified by loading them in headless Chrome, and every one of those loads
+     wrote a real `viewed` event. Rows 4, 6, 15 and 16 of `Follow-up` were
+     already showing opens before the guests had touched the message, and the
+     Events tab is append-only by design, so it could not be taken back. Check
+     a page with this flag on. */
+  function muted() {
+    try {
+      return /(^|[?&])notrack=1(&|$)/.test(window.location.search);
+    } catch (e) { return false; }
+  }
+
   function send(token, event) {
     var cfg = window.INVITE_CONFIG || {};
-    if (!cfg.TRACKING || !cfg.WEB_APP_URL || !token) return;
+    if (!cfg.TRACKING || !cfg.WEB_APP_URL || !token || muted()) return;
 
     var payload = JSON.stringify({
       token: token,
