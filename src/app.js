@@ -16,7 +16,7 @@
 
   var cfg = window.INVITE_CONFIG || {};
   var T = window.InviteStrings.get();
-  var VARIANTS = ['line-up', 'room'];
+  var VARIANTS = ['line-up', 'room', 'line-up-short'];
 
   /* --- 1. theme ---------------------------------------------------------- */
   /* The kit ships a complete dark palette under [data-theme="dark"]. Rather

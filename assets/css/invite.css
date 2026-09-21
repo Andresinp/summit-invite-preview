@@ -534,3 +534,67 @@ section.has-rail table { min-width: 20rem; }
   }
   .sheet h1 { font-size: 2.4rem; }
 }
+
+/* ---- the reduced option: line-up-short ----------------------------------
+   Scoped to one variant so the two sheets that actually go out cannot be
+   touched by anything below. `data-variant` is set on <body> by src/app.js.
+
+   A three-column table is the wrong component on a 390px screen: the columns
+   wrap into each other and seven sessions read as one undifferentiated block. Below
+   each row becomes its own stacked entry — when, then session, then who — in
+   the same type and rules the sheet already uses. Nothing new is introduced.  */
+
+@media (max-width: 46rem) {
+  body[data-variant="line-up-short"] .itinerary { border-top: 0; }
+
+  body[data-variant="line-up-short"] .itinerary table,
+  body[data-variant="line-up-short"] .itinerary tbody,
+  body[data-variant="line-up-short"] .itinerary tr,
+  body[data-variant="line-up-short"] .itinerary td { display: block; width: auto; }
+
+  /* The headers named the columns; stacked rows name themselves. */
+  body[data-variant="line-up-short"] .itinerary thead {
+    position: absolute;
+    width: 1px; height: 1px;
+    margin: -1px; padding: 0;
+    overflow: hidden; clip: rect(0 0 0 0);
+    white-space: nowrap; border: 0;
+  }
+
+  body[data-variant="line-up-short"] .itinerary tr {
+    padding: var(--space-4) 0;
+    border-top: var(--border-width) solid var(--border-subtle);
+  }
+  body[data-variant="line-up-short"] .itinerary tr:first-child {
+    border-top: var(--border-width) solid var(--border-strong);
+  }
+
+  body[data-variant="line-up-short"] .itinerary td {
+    padding: 0;
+    border-bottom: 0;
+  }
+
+  /* The time becomes the entry's own eyebrow, in the mono label the sheet
+     already uses for every other label. */
+  body[data-variant="line-up-short"] .itinerary td.when {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-accent);
+    white-space: nowrap;
+    margin-bottom: var(--space-2);
+  }
+
+  body[data-variant="line-up-short"] .itinerary td.what {
+    font: var(--type-body);
+    color: var(--text-primary);
+  }
+
+  /* Everything after the first two cells is supporting detail. */
+  body[data-variant="line-up-short"] .itinerary td.what ~ td {
+    font: var(--type-body-sm);
+    color: var(--text-secondary);
+    margin-top: var(--space-1);
+  }
+}
