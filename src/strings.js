@@ -18,8 +18,8 @@ window.InviteStrings = (function () {
          greeting, and "Mockname Mocksurname Uno, Sebastian thought…" is not one.
          `vouchedAlone` is not a lesser version — it is what a guest with no
          connector on their row gets, and it has to stand on its own. */
-      vouched:      '{name}, {connector} thought you should be in the room.',
-      vouchedAlone: '{name}, you should be in the room.',
+      greeting:     'Hi {name},',
+      vouched:      '{connector} thought you should be in the room.',
       preparedFor:  'Prepared for',
       putForwardBy: 'Put forward by',
       codeLabel:    'Your invite code',
@@ -45,8 +45,8 @@ window.InviteStrings = (function () {
       footNote:     'Private invitation. Not for circulation.',
     },
     es: {
-      vouched:      '{name}, {connector} cree que deberías estar en esa sala.',
-      vouchedAlone: '{name}, deberías estar en esa sala.',
+      greeting:     'Hola {name},',
+      vouched:      '{connector} cree que deberías estar en esa sala.',
       preparedFor:  'Preparada para',
       putForwardBy: 'Propuesto por',
       codeLabel:    'Tu código de invitación',

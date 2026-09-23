@@ -102,12 +102,17 @@ body {
   display: block;
   color: var(--text-accent);
   margin-bottom: var(--space-6);
-  /* No size or tracking of its own. It fits on one line because the MARK is
-     short, not because the type was shrunk: at --text-xs the long form needs
-     361px and a 390px phone leaves 308, and 320px leaves 254 — less than the
-     289px the glyphs alone want at zero tracking. Scaling the font down does
-     fit it, and takes it under the kit's 12px floor, which tests/ds_probe.html
-     rejects and is right to. The full sentence still closes every page. */
+  /* One line with the full mark, which is the whole reason this overrides the
+     shared 0.15em. Measured, not guessed: the glyphs alone want 289px at
+     --text-xs, and the sheet leaves 294px at 360, 308 at 390, 332 at 414. So
+     every pixel of tracking has to go, and it still fits from 360 up with
+     about 5px in hand at the tightest.
+
+     At 320 it wraps and nothing here can stop it — 254px of room against 289px
+     of glyphs. The only fix is a smaller face, which is under the kit's 12px
+     floor and is what tests/ds_probe.html rejects. Two lines on a 320px phone
+     is the right trade. */
+  letter-spacing: 0;
 }
 
 /* A.1 — the personalised line. Rebuilt from data by src/app.js, which drops a
@@ -124,32 +129,49 @@ body {
    survive both. */
 .addressee { visibility: hidden; }
 .addressee.is-ready { visibility: visible; }
-/* The personal line, and the two quiet ones under it.
-   AP, 23 Sep: the sentence that carries the invitation is "<name>, <connector>
-   thought you should be in the room." It is the most personal thing on the
-   page, so it is the one that is read first after the stamp — large and in the
-   primary colour. The confirmation and the organisation sit under it as
-   context, in the caption voice, because they are what the reader already
-   knows. It stays a step below the <h1>: it addresses the reader, it does not
-   make the argument. */
-.addressee {
-  font: var(--weight-regular) var(--text-xl)/var(--leading-snug) var(--font-display);
+/* The head, AP's spec of 23 Sep.
+
+     PRIVATE INVITATION · NOT FOR CIRCULATION
+     Hi <name>,                                   22-ish, primary
+     <organisation>                               12, secondary
+     <connector> thought you should be in the room.
+     You're invited to the Contextful Summit.     15, secondary
+     <40px>
+     The missing half of intelligence.
+
+   The greeting is --text-xl. AP asked for ~22px and the kit steps 20 → 24 with
+   nothing between, so it takes the nearer one rather than leaving the scale for
+   two pixels. Leading is tight because the two large lines are one thought. */
+/* `.sheet p` at the top of this file is (0,1,1) and every one of these is a
+   <p> inside .sheet, so a bare `.addressee` or `.invited` at (0,1,0) loses its
+   margin to it silently — the rule reads correctly and does nothing. Scoping
+   them to .sheet is what makes them apply at all. */
+.sheet .addressee {
+  margin: 0 0 var(--space-3);          /* 12px inside the block */
+}
+.addressee .greet,
+.addressee .vouch {
+  display: block;
+  font: var(--weight-regular) var(--text-xl)/var(--leading-tight) var(--font-display);
   color: var(--text-primary);
   letter-spacing: var(--tracking-heading);
-  margin: 0 0 var(--space-4);
-  max-width: 22ch;
+  max-width: 24ch;
 }
-.invited, .org {
+/* The organisation sits between the two large lines, so it needs its own line
+   box: at half their size a <br> would hand it their line height and open a
+   gap that reads as a paragraph break. */
+.addressee .org {
+  display: block;
   font: var(--type-caption);
   color: var(--text-secondary);
-  margin: 0;
-  line-height: var(--leading-relaxed);
+  margin: var(--space-1) 0 var(--space-2);
 }
-.invited { margin-bottom: var(--space-1); }
-.org { margin-bottom: var(--space-6); }
-/* The sentence is one voice: no word inside it is emphasised, because the
-   whole line is already the emphasis. */
-.addressee strong { font-weight: inherit; color: inherit; }
+.sheet .invited {
+  font: var(--type-body);
+  color: var(--text-secondary);
+  margin: 0 0 var(--space-10);         /* 40px before the title */
+  line-height: var(--leading-normal);
+}
 
 .sheet h1 {
   font: var(--type-h2);

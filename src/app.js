@@ -122,35 +122,32 @@
     if (!profile) { node.remove(); return; }           // generic page: no line at all
 
     /* Always the first name. cfg.HEADER_NAME picks how the old two-line block
-       addressed someone; this is a greeting inside a sentence, and a full name
-       in it reads like a summons rather than a note from a person. */
+       addressed someone; this is a greeting, and a full name in it reads like
+       a summons rather than a note from a person. */
     var first = profile.firstName
       || (profile.fullName || '').trim().split(/\s+/)[0]
       || '';
 
-    var line = '';
-    if (first && profile.codeOwner) {
-      line = T.vouched.replace('{name}', first).replace('{connector}', profile.codeOwner);
-    } else if (first) {
-      line = T.vouchedAlone.replace('{name}', first);
+    if (!first) { node.remove(); return; }             // no name, no greeting
+
+    /* Three lines, and the middle one is quiet:
+
+         Hi <first>,                                   .greet
+         <organisation>                                .org
+         <connector> thought you should be in the room. .vouch
+
+       They are block spans rather than <br>, because .org is half the size of
+       the two around it and a <br> would give it their line height. Each line
+       is built only when its value exists, so a row missing an organisation or
+       a connector loses that line and nothing else. */
+    node.textContent = '';
+    node.appendChild(el('span', 'greet', T.greeting.replace('{name}', first)));
+    if (profile.org) node.appendChild(el('span', 'org', profile.org));
+    if (profile.codeOwner) {
+      node.appendChild(el('span', 'vouch',
+        T.vouched.replace('{connector}', profile.codeOwner)));
     }
-
-    if (!line) { node.remove(); return; }
-
-    node.textContent = line;
     node.classList.add('is-ready');       // it holds a name now; let it show
-
-    /* The organisation is context, not address: it goes last and quiet. It is
-       inserted rather than baked in because a row without one must not leave an
-       empty line behind.
-
-       It follows the confirmation line when there is one and the sentence
-       itself when there is not. Hanging it off .invited alone silently dropped
-       the organisation on every sheet that does not carry that line. */
-    if (profile.org) {
-      var after = root.querySelector('.invited') || node;
-      after.parentNode.insertBefore(el('p', 'org', profile.org), after.nextSibling);
-    }
   }
 
   /* The sheet carries its own claim block, which is the placeholder this whole
