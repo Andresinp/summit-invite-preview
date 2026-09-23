@@ -367,6 +367,14 @@ section.has-rail table { min-width: 20rem; }
   column-gap: var(--space-8);
 }
 .deck, .colset, .across { margin-top: var(--space-6); }
+/* Space underneath only when something follows. These three used to be the last
+   thing in their section, so a bottom margin was never missed — until `read
+   more` put a paragraph after the column set on 23 Sep and it collided with the
+   last cell. `:last-child` keeps the ones that still end a section exactly as
+   they were, so the section rhythm does not move. */
+.deck:not(:last-child), .colset:not(:last-child), .across:not(:last-child) {
+  margin-bottom: var(--space-6);
+}
 .deck .box, .colset .box, .across .box { margin-bottom: 0; }
 .across .box b { grid-column: 1 / -1; }
 
