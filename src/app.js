@@ -130,24 +130,40 @@
 
     if (!first) { node.remove(); return; }             // no name, no greeting
 
-    /* Three lines, and the middle one is quiet:
+    /* Two lines, and the second one sits to the right:
 
-         Hi <first>,                                   .greet
-         <organisation>                                .org
-         <connector> thought you should be in the room. .vouch
+         Hi <first>,                                    .greet
+              <connector> thought you should be in the room.  .vouch
 
-       They are block spans rather than <br>, because .org is half the size of
-       the two around it and a <br> would give it their line height. Each line
-       is built only when its value exists, so a row missing an organisation or
-       a connector loses that line and nothing else. */
+       Block spans rather than <br>, because the two are different sizes and a
+       <br> would give them one line height. A row with no connector loses the
+       second line and nothing else. */
     node.textContent = '';
     node.appendChild(el('span', 'greet', T.greeting.replace('{name}', first)));
-    if (profile.org) node.appendChild(el('span', 'org', profile.org));
     if (profile.codeOwner) {
       node.appendChild(el('span', 'vouch',
         T.vouched.replace('{connector}', profile.codeOwner)));
     }
     node.classList.add('is-ready');       // it holds a name now; let it show
+
+    /* The organisation is named in the confirmation line now rather than given
+       one of its own. The sheet carries the version without it, so a row with
+       no organisation — and the generic page, which never gets here — is left
+       with a sentence that is still true.
+
+       Not every sheet has that line. Hanging the organisation off it alone
+       dropped it entirely from the ones that do not, silently, which is the
+       second time this exact shape has bitten: a value that only appears when
+       some other element happens to exist. The fallback keeps it on the page
+       as its own quiet line. */
+    if (profile.org) {
+      var invited = root.querySelector('.invited');
+      if (invited) {
+        invited.textContent = T.invitedWithOrg.replace('{org}', profile.org);
+      } else {
+        node.appendChild(el('span', 'org', profile.org));
+      }
+    }
   }
 
   /* The sheet carries its own claim block, which is the placeholder this whole

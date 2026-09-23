@@ -20,6 +20,10 @@ window.InviteStrings = (function () {
          connector on their row gets, and it has to stand on its own. */
       greeting:     'Hi {name},',
       vouched:      '{connector} thought you should be in the room.',
+      /* The organisation moved into this sentence on 23 Sep. The sheet carries
+         the version without it, which is what a reader with no organisation on
+         their row — and the generic page — keeps. */
+      invitedWithOrg: 'You and {org} are invited to the Contextful Summit.',
       preparedFor:  'Prepared for',
       putForwardBy: 'Put forward by',
       codeLabel:    'Your invite code',
@@ -47,6 +51,7 @@ window.InviteStrings = (function () {
     es: {
       greeting:     'Hola {name},',
       vouched:      '{connector} cree que deberías estar en esa sala.',
+      invitedWithOrg: 'Tú y {org} están invitados al Contextful Summit.',
       preparedFor:  'Preparada para',
       putForwardBy: 'Propuesto por',
       codeLabel:    'Tu código de invitación',

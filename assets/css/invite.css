@@ -101,7 +101,7 @@ body {
 .stamp {
   display: block;
   color: var(--text-accent);
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-4);
   /* One line with the full mark, which is the whole reason this overrides the
      shared 0.15em. Measured, not guessed: the glyphs alone want 289px at
      --text-xs, and the sheet leaves 294px at 360, 308 at 390, 332 at 414. So
@@ -132,45 +132,65 @@ body {
 /* The head, AP's spec of 23 Sep.
 
      PRIVATE INVITATION · NOT FOR CIRCULATION
-     Hi <name>,                                   22-ish, primary
-     <organisation>                               12, secondary
-     <connector> thought you should be in the room.
-     You're invited to the Contextful Summit.     15, secondary
+     Hi <name>,                                                 24, primary
+                  <connector> thought you should be in the room.  20, primary, right
+     You and <organisation> are invited to the Contextful Summit. 17, secondary
      <40px>
      The missing half of intelligence.
 
-   The greeting is --text-xl. AP asked for ~22px and the kit steps 20 → 24 with
-   nothing between, so it takes the nearer one rather than leaving the scale for
-   two pixels. Leading is tight because the two large lines are one thought. */
-/* `.sheet p` at the top of this file is (0,1,1) and every one of these is a
-   <p> inside .sheet, so a bare `.addressee` or `.invited` at (0,1,0) loses its
+   The greeting is --text-xl and the line under it drops one step to --text-lg:
+   the name is the address and the sentence is the reason, so the reason should
+   not shout as loudly. Pushing it right turns the two into a short exchange
+   rather than a stack, which is the point of the asymmetry.
+
+   The confirmation is --text-md. AP asked for one pixel more than the 15px it
+   was; the kit steps 15 → 17 with nothing between, so it takes the next one up
+   rather than leaving the scale for a pixel nobody can see.
+
+   `.sheet p` at the top of this file is (0,1,1) and both blocks here are a <p>
+   inside .sheet, so a bare `.addressee` or `.invited` at (0,1,0) loses its
    margin to it silently — the rule reads correctly and does nothing. Scoping
    them to .sheet is what makes them apply at all. */
 .sheet .addressee {
-  margin: 0 0 var(--space-3);          /* 12px inside the block */
+  margin: 0 0 var(--space-2);          /* 8px: the block is tighter now */
 }
 .addressee .greet,
 .addressee .vouch {
   display: block;
-  font: var(--weight-regular) var(--text-xl)/var(--leading-tight) var(--font-display);
   color: var(--text-primary);
   letter-spacing: var(--tracking-heading);
-  max-width: 24ch;
+  font-family: var(--font-display);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-tight);
 }
-/* The organisation sits between the two large lines, so it needs its own line
-   box: at half their size a <br> would hand it their line height and open a
-   gap that reads as a paragraph break. */
+.addressee .greet { font-size: var(--text-xl); max-width: 24ch; }
+/* Right against the measure, not against the viewport: margin-left auto pushes
+   the box over, and the max-width keeps the line from running the full width
+   of a laptop and losing the shape entirely. */
+.addressee .vouch {
+  font-size: var(--text-lg);
+  max-width: 26ch;
+  margin-left: auto;
+  text-align: right;
+  margin-top: var(--space-1);
+}
+/* Only reached on a sheet with no confirmation line; the invitation we ship
+   names the organisation inside that sentence instead. */
 .addressee .org {
   display: block;
   font: var(--type-caption);
   color: var(--text-secondary);
-  margin: var(--space-1) 0 var(--space-2);
+  margin-top: var(--space-2);
+  text-align: right;
 }
 .sheet .invited {
-  font: var(--type-body);
+  font-size: var(--text-md);
+  font-family: var(--font-body);
+  font-weight: var(--weight-regular);
   color: var(--text-secondary);
   margin: 0 0 var(--space-10);         /* 40px before the title */
-  line-height: var(--leading-normal);
+  line-height: var(--leading-snug);
+  max-width: 34ch;
 }
 
 .sheet h1 {
