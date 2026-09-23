@@ -102,6 +102,12 @@ body {
   display: block;
   color: var(--text-accent);
   margin-bottom: var(--space-6);
+  /* No size or tracking of its own. It fits on one line because the MARK is
+     short, not because the type was shrunk: at --text-xs the long form needs
+     361px and a 390px phone leaves 308, and 320px leaves 254 — less than the
+     289px the glyphs alone want at zero tracking. Scaling the font down does
+     fit it, and takes it under the kit's 12px floor, which tests/ds_probe.html
+     rejects and is right to. The full sentence still closes every page. */
 }
 
 /* A.1 — the personalised line. Rebuilt from data by src/app.js, which drops a
@@ -118,17 +124,32 @@ body {
    survive both. */
 .addressee { visibility: hidden; }
 .addressee.is-ready { visibility: visible; }
-.addressee, .invited {
+/* The personal line, and the two quiet ones under it.
+   AP, 23 Sep: the sentence that carries the invitation is "<name>, <connector>
+   thought you should be in the room." It is the most personal thing on the
+   page, so it is the one that is read first after the stamp — large and in the
+   primary colour. The confirmation and the organisation sit under it as
+   context, in the caption voice, because they are what the reader already
+   knows. It stays a step below the <h1>: it addresses the reader, it does not
+   make the argument. */
+.addressee {
+  font: var(--weight-regular) var(--text-xl)/var(--leading-snug) var(--font-display);
+  color: var(--text-primary);
+  letter-spacing: var(--tracking-heading);
+  margin: 0 0 var(--space-4);
+  max-width: 22ch;
+}
+.invited, .org {
   font: var(--type-caption);
   color: var(--text-secondary);
-  margin: 0 0 var(--space-5);
+  margin: 0;
   line-height: var(--leading-relaxed);
 }
-.invited { margin-bottom: var(--space-4); }
-.addressee strong {
-  font-weight: var(--weight-medium);
-  color: var(--text-primary);
-}
+.invited { margin-bottom: var(--space-1); }
+.org { margin-bottom: var(--space-6); }
+/* The sentence is one voice: no word inside it is emphasised, because the
+   whole line is already the emphasis. */
+.addressee strong { font-weight: inherit; color: inherit; }
 
 .sheet h1 {
   font: var(--type-h2);

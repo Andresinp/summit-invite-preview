@@ -104,43 +104,53 @@
 
   /* A.1 — the personalised head.
      Built from data rather than by swapping {{TOKENS}} in place, because a
-     missing value has to remove its whole line, not leave "Put forward by"
-     hanging with nothing after it. No organisation means no separator either. */
+     missing value has to remove its whole line rather than leave half a
+     sentence standing. Three lines, in this order:
+
+       <name>, <connector> thought you should be in the room.   .addressee
+       You're invited to the Contextful Summit.                 .invited
+       <organisation>                                           .org
+
+     The first is the only one that knows anything about the reader, so it is
+     the only one that can be wrong. Without a name there is no sentence at all
+     and the element goes, which leaves the page saying only what it can still
+     honestly say. */
   function personaliseHeader(root, profile) {
     var node = root.querySelector('.addressee');
     if (!node) return;
 
     if (!profile) { node.remove(); return; }           // generic page: no line at all
 
-    var name = cfg.HEADER_NAME === 'first'
-      ? (profile.firstName || profile.fullName)
-      : (profile.fullName || profile.firstName);
+    /* Always the first name. cfg.HEADER_NAME picks how the old two-line block
+       addressed someone; this is a greeting inside a sentence, and a full name
+       in it reads like a summons rather than a note from a person. */
+    var first = profile.firstName
+      || (profile.fullName || '').trim().split(/\s+/)[0]
+      || '';
 
-    var lines = [];
-
-    if (name) {
-      var l1 = el('span');
-      l1.appendChild(document.createTextNode(T.preparedFor + ' '));
-      l1.appendChild(el('strong', null, name));
-      if (profile.org) l1.appendChild(document.createTextNode(' · ' + profile.org));
-      lines.push(l1);
+    var line = '';
+    if (first && profile.codeOwner) {
+      line = T.vouched.replace('{name}', first).replace('{connector}', profile.codeOwner);
+    } else if (first) {
+      line = T.vouchedAlone.replace('{name}', first);
     }
 
-    if (profile.codeOwner) {
-      var l2 = el('span');
-      l2.appendChild(document.createTextNode(T.putForwardBy + ' '));
-      l2.appendChild(el('strong', null, profile.codeOwner));
-      lines.push(l2);
-    }
+    if (!line) { node.remove(); return; }
 
-    if (!lines.length) { node.remove(); return; }
-
-    node.textContent = '';
-    lines.forEach(function (l, i) {
-      if (i) node.appendChild(document.createElement('br'));
-      node.appendChild(l);
-    });
+    node.textContent = line;
     node.classList.add('is-ready');       // it holds a name now; let it show
+
+    /* The organisation is context, not address: it goes last and quiet. It is
+       inserted rather than baked in because a row without one must not leave an
+       empty line behind.
+
+       It follows the confirmation line when there is one and the sentence
+       itself when there is not. Hanging it off .invited alone silently dropped
+       the organisation on every sheet that does not carry that line. */
+    if (profile.org) {
+      var after = root.querySelector('.invited') || node;
+      after.parentNode.insertBefore(el('p', 'org', profile.org), after.nextSibling);
+    }
   }
 
   /* The sheet carries its own claim block, which is the placeholder this whole

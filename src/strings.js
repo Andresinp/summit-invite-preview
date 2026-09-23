@@ -14,6 +14,12 @@ window.InviteStrings = (function () {
 
   var S = {
     en: {
+      /* The invitation's own sentence. {name} is always the FIRST name: it is a
+         greeting, and "Mockname Mocksurname Uno, Sebastian thought…" is not one.
+         `vouchedAlone` is not a lesser version — it is what a guest with no
+         connector on their row gets, and it has to stand on its own. */
+      vouched:      '{name}, {connector} thought you should be in the room.',
+      vouchedAlone: '{name}, you should be in the room.',
       preparedFor:  'Prepared for',
       putForwardBy: 'Put forward by',
       codeLabel:    'Your invite code',
@@ -21,6 +27,8 @@ window.InviteStrings = (function () {
       confirmCta:   'Confirm my attendance',
       confirmNote:  'It takes a minute. Your details are already filled in.',
       genericCta:   'Apply for a seat',
+      briefLabel:   'Your invitation',
+      briefCta:     'See your full invitation',
       genericNote:  'We answer every application within 24 hours.',
       confirmedLabel:    'Confirmed',
       confirmedHeadline: 'Your place is confirmed.',
@@ -37,6 +45,8 @@ window.InviteStrings = (function () {
       footNote:     'Private invitation. Not for circulation.',
     },
     es: {
+      vouched:      '{name}, {connector} cree que deberías estar en esa sala.',
+      vouchedAlone: '{name}, deberías estar en esa sala.',
       preparedFor:  'Preparada para',
       putForwardBy: 'Propuesto por',
       codeLabel:    'Tu código de invitación',
@@ -44,6 +54,8 @@ window.InviteStrings = (function () {
       confirmCta:   'Confirmar mi asistencia',
       confirmNote:  'Toma un minuto. Tus datos ya van cargados.',
       genericCta:   'Solicitar un asiento',
+      briefLabel:   'Tu invitación',
+      briefCta:     'Ver tu invitación completa',
       genericNote:  'Respondemos cada solicitud en 24 horas.',
       confirmedLabel:    'Confirmado',
       confirmedHeadline: 'Tu lugar está confirmado.',
