@@ -6,6 +6,10 @@
      3. the sheet body is fetched and personalised
      4. the confirmation block is built — A.3, or A.4 if they are already in
 
+   A sheet may also ask for the seat before the end: any standalone link to the
+   apply form in the markdown becomes the same button, on the same link. Only
+   the reduced variant does it today.
+
    There is exactly one failure mode and it is the generic page: no token, an
    unknown token, a source that is down. A guest never sees a 404 and never
    sees an error. See README.md, "What can go wrong".
@@ -19,10 +23,19 @@
   var VARIANTS = ['line-up', 'room', 'line-up-short'];
 
   /* --- 1. theme ---------------------------------------------------------- */
-  /* The kit ships a complete dark palette under [data-theme="dark"]. Rather
-     than restate any of it — which would mean writing colours — we just set
-     the attribute when the system asks for dark. Light is the default. */
+  /* The kit ships both palettes under [data-theme]. Nothing is restated here —
+     which would mean writing colours — we only choose which one is on.
+
+     The invitation is dark by default and stays dark on a phone set to light,
+     because it has to look like contextful.com and not like the phone. A guest
+     comparing the two has to see one brand. `THEME: 'auto'` gives back the old
+     behaviour, following the system. */
   function applyTheme() {
+    var pinned = cfg.THEME || 'dark';
+    if (pinned === 'dark' || pinned === 'light') {
+      document.documentElement.setAttribute('data-theme', pinned);
+      return;
+    }
     try {
       var mq = window.matchMedia('(prefers-color-scheme: dark)');
       var set = function () {
@@ -31,7 +44,7 @@
       set();
       if (mq.addEventListener) mq.addEventListener('change', set);
     } catch (e) {
-      document.documentElement.setAttribute('data-theme', 'light');
+      document.documentElement.setAttribute('data-theme', 'dark');
     }
   }
 
@@ -137,6 +150,64 @@
     if (claim) claim.remove();
   }
 
+  /* --- 3b. the inline asks ----------------------------------------------- */
+
+  /* One button component, asked for more than once.
+
+     A sheet marks a place to ask by carrying a standalone link to the apply
+     form. The markdown knows nothing about buttons: every such link becomes
+     the same `.btn` the confirmation block uses, on the same personalised URL,
+     reporting the same event. The sheets that do not carry one are untouched.
+
+     Two cases are the whole reason this is not a template string:
+       - a guest who has already confirmed is asked for nothing, so the slots
+         are removed rather than restyled;
+       - render() can run twice (see revalidate), so a wired link is updated
+         in place and never given a second click handler. */
+
+  function ctaLabel(profile) { return profile ? T.confirmCta : T.genericCta; }
+
+  function wireCta(a, profile, token) {
+    a.className = 'btn';
+    a.href = applyLink(token, profile);
+    a.textContent = ctaLabel(profile);
+    if (a.getAttribute('data-cta')) return a;          // already has its handler
+    a.setAttribute('data-cta', '1');
+    a.addEventListener('click', function () {
+      window.InviteTrack.send(token, 'apply_opened');   // fire and forget
+    });
+    return a;
+  }
+
+  function inlineCtas(root, profile, token) {
+    var links = root.querySelectorAll('a[href*="contextful.com/apply"]');
+    if (!links.length) return;
+
+    var confirmed = !!(profile && profile.confirmed);
+
+    Array.prototype.forEach.call(links, function (a) {
+      var p = a.parentNode;
+      var alone = p && p.tagName === 'P' &&
+                  p.textContent.trim() === a.textContent.trim();
+      var slot = alone ? p : a;
+      if (confirmed) { slot.parentNode.removeChild(slot); return; }
+      if (alone) slot.className = 'cta-inline';
+      wireCta(a, profile, token);
+    });
+
+    /* The first ask belongs under the vitals strip, where the reader has just
+       been told what the two days are. The markdown header block ends at that
+       table and cannot hold anything after it, so this one is placed here. */
+    var vitals = root.querySelector('header .vitals');
+    if (!vitals) return;
+    var old = root.querySelector('.cta-hero');
+    if (old) old.parentNode.removeChild(old);
+    if (confirmed) return;
+    var hero = el('p', 'cta-inline cta-hero');
+    hero.appendChild(wireCta(el('a', null, ''), profile, token));
+    vitals.parentNode.insertBefore(hero, vitals.nextSibling);
+  }
+
   /* --- 4. the confirmation block ----------------------------------------- */
 
   function buildConfirm(profile, token) {
@@ -198,6 +269,7 @@
     function place(sheet) {
       personaliseHeader(sheet, profile);
       dropSheetClaim(sheet);
+      inlineCtas(sheet, profile, token);
       if (sheet.parentNode !== main) {
         main.textContent = '';
         main.appendChild(sheet);

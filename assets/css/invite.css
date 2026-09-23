@@ -111,14 +111,20 @@ body {
    is already on screen, so the alternative is a line of merge tokens or an
    empty slot flashing before the name lands. `visibility` rather than
    `display`: the space is held, so nothing below it jumps. */
+/* A.0 — the orientation line, above the title: "you were invited to this".
+   It takes the addressee's exact treatment rather than a second caption style,
+   but it is NOT .addressee: src/app.js rebuilds that line from the guest's own
+   data and removes it outright when there is no guest, and this line has to
+   survive both. */
 .addressee { visibility: hidden; }
 .addressee.is-ready { visibility: visible; }
-.addressee {
+.addressee, .invited {
   font: var(--type-caption);
   color: var(--text-secondary);
   margin: 0 0 var(--space-5);
   line-height: var(--leading-relaxed);
 }
+.invited { margin-bottom: var(--space-4); }
 .addressee strong {
   font-weight: var(--weight-medium);
   color: var(--text-primary);
@@ -169,6 +175,23 @@ body {
   flex: 1;
   height: var(--border-width);
   background: var(--border-subtle);
+}
+
+/* The end of one phase of the sheet, inside a section. The programme finishes
+   on October 7 and what follows is the reader's own arrangements, which without
+   this reads as more programme.
+
+   It is the sheet's own vocabulary, one step up. `--border-strong` is already
+   what this stylesheet rules a heading with, and `--border-subtle` is what the
+   agenda rules its rows with — so at subtle weight the break read as one more
+   table row, which is exactly the confusion it exists to end. Strong colour,
+   the kit's 1.5px, and a full --space-12 above it, because the break has to be
+   felt before it is read. No new component. */
+.phase-end {
+  border: 0;
+  height: var(--border-width-strong);
+  background: var(--border-strong);
+  margin: var(--space-12) 0 var(--space-10);
 }
 
 .sheet h2 {
@@ -431,7 +454,11 @@ section.has-rail table { min-width: 20rem; }
 }
 .code-plate .code {
   font-family: var(--font-mono);
-  font-size: var(--text-3xl);
+  /* Full size when there is room, and never wider than the screen.
+     A breakpoint cannot do this: the widest code needs a 432px viewport at
+     --text-3xl, so any threshold tight enough to leave ordinary phones alone
+     still breaks somewhere in between. min() just makes it fit. */
+  font-size: min(var(--text-3xl), 9vw);
   font-weight: var(--weight-regular);
   letter-spacing: 0.06em;
   line-height: var(--leading-tight);
@@ -442,14 +469,40 @@ section.has-rail table { min-width: 20rem; }
   color: var(--text-secondary);
   max-width: 34ch;
 }
+/* Invite codes vary far more than they look. Of the 119 Airtable has issued, 78
+   are five characters (62179) — but about twenty run to thirteen
+   (SEBASTIANC001) and one is fourteen (CTX-8A74592559, the shared connector
+   code, which is the one every invitation we have sent so far carries).
+
+   At --text-3xl the fourteen-character one is 291px, which does not fit a 320px
+   screen; it ran straight off the side. Two steps down the kit's scale fits any
+   of them with room to spare. The breakpoint is deliberately tight — 336px, so
+   only the smallest phones are affected and every ordinary one keeps the code at
+   full size, where it is meant to be the loudest thing on the page.
+
+   Note SEBASTIANC001 is the harder case, not the longer one: it has no hyphen,
+   so it cannot wrap, while CTX-8A74592559 breaks after the dash if it must.
+
+   THIS HAS TO SIT BELOW THE RULE IT OVERRIDES. A media query adds no
+   specificity, so the same selector higher up the file loses to the base rule
+   and silently does nothing — which is exactly what happened the first time. */
+
 
 .btn {
   display: inline-block;
   font-family: var(--font-body);
-  font-size: var(--text-base);
+  /* Compact box, confident label. The rectangle was doing the talking and the
+     words were not: the label goes up a step and the padding comes in a step,
+     so the type fills the box instead of floating in it.
+
+     THE HEIGHT DOES NOT COME DOWN, and it is not an oversight. 44px is the
+     accessibility floor for a tap target and the kit's step below --control-lg
+     is --control-md at 40, which fails it. Tried it; tests/ds_probe.html caught
+     it at 40px on both asks. The tightening is the padding and the label. */
+  font-size: var(--text-lg);
   font-weight: var(--weight-medium);
   line-height: 1;
-  padding: var(--space-4) var(--space-8);
+  padding: var(--space-3) var(--space-6);
   min-height: var(--control-lg);
   border: var(--border-width) solid transparent;
   border-radius: var(--radius-sm);          /* modest, never pill */
@@ -461,6 +514,30 @@ section.has-rail table { min-width: 20rem; }
 }
 .btn:hover { background: var(--bg-accent-hover); }
 .btn:active { background: var(--bg-accent-active); }
+
+/* The same button, asked for earlier. A sheet can carry a standalone link to
+   the apply form and src/app.js turns it into this; it is the button on its
+   own line, with the sheet's own rhythm around it, and no container of its
+   own. On a phone it runs the width of the sheet — a half-width target at the
+   end of a thumb is the only thing that would be new here. */
+.sheet .cta-inline { margin: var(--space-6) 0 0; max-width: none; }
+
+/* `.sheet a` sets the link colour and outranks `.btn` on its own, which paints
+   the label in the accent on top of the accent — a bar with nothing legible in
+   it. Inside the sheet the button keeps its own colour. */
+.sheet .btn { color: var(--text-on-accent); }
+
+/* An ask inside the sheet is an offer, not the close: it is the same button in
+   a smaller voice — narrower, and one step down the type scale. The height is
+   the one thing that does not shrink, because 48px is the tap target. */
+.cta-inline .btn {
+  font-size: var(--text-base);
+  padding: var(--space-3) var(--space-6);
+}
+
+/* The vitals strip ends on a line of its own, so the first ask needs air above
+   it or it reads as part of the strip. */
+.sheet .cta-hero { margin-top: var(--space-8); }
 
 .confirm .note {
   font: var(--type-caption);
@@ -519,7 +596,7 @@ section.has-rail table { min-width: 20rem; }
 @media print {
   body { background: var(--bg-surface); }
   .page { max-width: none; padding: 0; }
-  .masthead .dateline, .foot, .btn, .confirm .note { display: none; }
+  .masthead .dateline, .foot, .btn, .cta-inline, .confirm .note { display: none; }
   .sheet, .confirm {
     border: 0;
     border-radius: 0;
@@ -535,34 +612,86 @@ section.has-rail table { min-width: 20rem; }
   .sheet h1 { font-size: 2.4rem; }
 }
 
-/* ---- the reduced option: line-up-short ----------------------------------
+/* ===========================================================================
+   The reduced option: line-up-short.
+
    Scoped to one variant so the two sheets that actually go out cannot be
    touched by anything below. `data-variant` is set on <body> by src/app.js.
+   Nothing here is a new component: it is the sheet's own mono label, its own
+   rules and its own type scale, arranged to cost less height.
+   =========================================================================== */
 
-   A three-column table is the wrong component on a 390px screen: the columns
-   wrap into each other and seven sessions read as one undifferentiated block. Below
-   each row becomes its own stacked entry — when, then session, then who — in
-   the same type and rules the sheet already uses. Nothing new is introduced.  */
+/* The last ask is the close, and it is the largest thing of its kind on the
+   page — one step up from the button in the sheet, in the block that also
+   carries the code. Scoped, so the two sheets that go out are unchanged. */
+body[data-variant="line-up-short"] .confirm .btn {
+  font-size: var(--text-md);
+  padding: var(--space-4) var(--space-10);
+}
 
+/* The rhythm, tightened for a thumb. Every value below is the one the sheet
+   already uses, one step down the same spacing scale — the proportions hold,
+   the page just stops spending 48px to say a section has ended. Only below
+   46rem, so the sheet on a laptop is unchanged. */
+@media (max-width: 46rem) {
+  body[data-variant="line-up-short"] .sheet > header { margin-bottom: var(--space-8); }
+  body[data-variant="line-up-short"] .standfirst { margin-bottom: var(--space-6); }
+  body[data-variant="line-up-short"] .sheet section { margin-top: var(--space-10); }
+  body[data-variant="line-up-short"] .stands { margin: var(--space-6) 0; }
+  body[data-variant="line-up-short"] .consequences { margin: var(--space-5) 0; }
+  body[data-variant="line-up-short"] .consequences li { padding: var(--space-3) 0; }
+  body[data-variant="line-up-short"] .close { margin-top: var(--space-10); }
+}
+
+/* One line of context under a heading, in the accent the sheet uses for every
+   other secondary mark. It is a line, not a section, and it is sized like one.
+   Only directly under the heading: the renderer gives `lead` to the first
+   paragraph of a section wherever it falls, and a sentence three screens down
+   is a sentence, not a caption. */
+body[data-variant="line-up-short"] .sheet h2 + p.lead {
+  font: var(--type-body-sm);
+  color: var(--text-accent);
+  max-width: 46ch;
+  margin-bottom: var(--space-6);
+}
+
+/* The day label. Written once per day, never once per row — the same mono
+   label a whole-line `code` paragraph renders everywhere else on the sheet.
+   The table's own top rule is what sits under it. */
+body[data-variant="line-up-short"] .seats {
+  color: var(--text-accent);
+  margin-top: var(--space-8);
+}
+
+/* A line of prose after the last table is a new thought, not a caption to it. */
+body[data-variant="line-up-short"] .itinerary + p { margin-top: var(--space-5); }
+
+/* Three tables, one programme: the column headers would otherwise be drawn
+   three times to say the same thing. They are still read out. */
+body[data-variant="line-up-short"] .itinerary thead {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+
+/* A three-column table is the wrong component on a 390px screen: the columns
+   wrap into each other and a day reads as one undifferentiated block. Below,
+   each row is its own entry in two lines — the session, then who and when —
+   so the eye runs topic, who, time down the page. The time is last and
+   lightest: it is the one thing a reader looks up rather than reads. */
 @media (max-width: 46rem) {
   body[data-variant="line-up-short"] .itinerary { border-top: 0; }
 
   body[data-variant="line-up-short"] .itinerary table,
-  body[data-variant="line-up-short"] .itinerary tbody,
-  body[data-variant="line-up-short"] .itinerary tr,
-  body[data-variant="line-up-short"] .itinerary td { display: block; width: auto; }
-
-  /* The headers named the columns; stacked rows name themselves. */
-  body[data-variant="line-up-short"] .itinerary thead {
-    position: absolute;
-    width: 1px; height: 1px;
-    margin: -1px; padding: 0;
-    overflow: hidden; clip: rect(0 0 0 0);
-    white-space: nowrap; border: 0;
-  }
+  body[data-variant="line-up-short"] .itinerary tbody { display: block; }
 
   body[data-variant="line-up-short"] .itinerary tr {
-    padding: var(--space-4) 0;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: var(--space-4);
+    padding: var(--space-3) 0;
     border-top: var(--border-width) solid var(--border-subtle);
   }
   body[data-variant="line-up-short"] .itinerary tr:first-child {
@@ -570,31 +699,39 @@ section.has-rail table { min-width: 20rem; }
   }
 
   body[data-variant="line-up-short"] .itinerary td {
+    display: block;
     padding: 0;
     border-bottom: 0;
   }
 
-  /* The time becomes the entry's own eyebrow, in the mono label the sheet
-     already uses for every other label. */
+  /* the session, first and on its own line */
+  body[data-variant="line-up-short"] .itinerary td.what {
+    grid-row: 1;
+    grid-column: 1 / -1;
+    font: var(--type-body);
+    color: var(--text-primary);
+  }
+
+  /* who is in it, under the title */
+  body[data-variant="line-up-short"] .itinerary td.what ~ td {
+    grid-row: 2;
+    grid-column: 1;
+    font: var(--type-body-sm);
+    color: var(--text-secondary);
+    margin-top: var(--space-1);
+  }
+
+  /* the time, in the sheet's mono label, held to the right of the same line */
   body[data-variant="line-up-short"] .itinerary td.when {
+    grid-row: 2;
+    grid-column: 2;
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     letter-spacing: 0.15em;
     text-transform: uppercase;
     color: var(--text-accent);
+    text-align: right;
     white-space: nowrap;
-    margin-bottom: var(--space-2);
-  }
-
-  body[data-variant="line-up-short"] .itinerary td.what {
-    font: var(--type-body);
-    color: var(--text-primary);
-  }
-
-  /* Everything after the first two cells is supporting detail. */
-  body[data-variant="line-up-short"] .itinerary td.what ~ td {
-    font: var(--type-body-sm);
-    color: var(--text-secondary);
     margin-top: var(--space-1);
   }
 }

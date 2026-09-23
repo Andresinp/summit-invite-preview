@@ -8,7 +8,7 @@
   "Code Owner": "Nathaly Rey",
   "Invite Code": "93032",
   "Invite Token": "mockgwivz9rde1f8bubyac5o8br901",
-  "Variant": "room",
+  "Variant": "line-up-short",
   "Invite Status": "Invite not sent"
  },
  {
@@ -20,7 +20,7 @@
   "Code Owner": "",
   "Invite Code": "26405",
   "Invite Token": "mocku4ggfaanqjf5xqa116ogefol02",
-  "Variant": "room",
+  "Variant": "line-up-short",
   "Invite Status": "Invite not sent"
  },
  {
@@ -32,7 +32,7 @@
   "Code Owner": "Sebastian",
   "Invite Code": "CTX-8A74592559",
   "Invite Token": "mockol940l9d8tll2cmhfx88fxel03",
-  "Variant": "line-up",
+  "Variant": "line-up-short",
   "Invite Status": "Invite not sent"
  },
  {
@@ -44,7 +44,7 @@
   "Code Owner": "Cesar",
   "Invite Code": "30222",
   "Invite Token": "mockt9z5mmf9vgmt7tomsyz3qfy904",
-  "Variant": "room",
+  "Variant": "line-up-short",
   "Invite Status": "Invite not sent"
  },
  {
@@ -56,7 +56,7 @@
   "Code Owner": "Nathaly Rey",
   "Invite Code": "CTX-8A74592559",
   "Invite Token": "mock2ab80vucexypodylyp8jqbu805",
-  "Variant": "line-up",
+  "Variant": "line-up-short",
   "Invite Status": "Invite not sent"
  },
  {
@@ -68,7 +68,7 @@
   "Code Owner": "Sebastian",
   "Invite Code": "26282",
   "Invite Token": "mockknt7mtll5ephzpgg9wcckmco06",
-  "Variant": "room",
+  "Variant": "line-up-short",
   "Invite Status": "Invite not sent"
  },
  {
@@ -80,7 +80,7 @@
   "Code Owner": "Carlos Ochoa",
   "Invite Code": "24317",
   "Invite Token": "mocke7ea05zlfutl455i87qcbzch07",
-  "Variant": "line-up",
+  "Variant": "line-up-short",
   "Invite Status": "Confirmed"
  },
  {
@@ -92,7 +92,7 @@
   "Code Owner": "Nathaly Rey",
   "Invite Code": "10633",
   "Invite Token": "mockxsupgu6rtfw1ffw87fm2lpg208",
-  "Variant": "line-up",
+  "Variant": "line-up-short",
   "Invite Status": "Invite not sent"
  },
  {
@@ -104,7 +104,7 @@
   "Code Owner": "Santi",
   "Invite Code": "70358",
   "Invite Token": "mockvwm4hw8bi25w3v72f48q3cm809",
-  "Variant": "line-up",
+  "Variant": "line-up-short",
   "Invite Status": "Invite not sent"
  },
  {
@@ -116,7 +116,7 @@
   "Code Owner": "Carlos Ochoa",
   "Invite Code": "98395",
   "Invite Token": "mockhoaf49m2lkdf2tbyoliydyli10",
-  "Variant": "room",
+  "Variant": "line-up-short",
   "Invite Status": "Contacted"
  },
  {
@@ -128,7 +128,7 @@
   "Code Owner": "",
   "Invite Code": "36988",
   "Invite Token": "mockcfk0ow5iloerzw6an3jq2p8111",
-  "Variant": "room",
+  "Variant": "line-up-short",
   "Invite Status": "Emailed"
  },
  {
@@ -140,7 +140,7 @@
   "Code Owner": "Sebastian",
   "Invite Code": "77443",
   "Invite Token": "mock779ybiiivh37eo8rpr5w1u9g12",
-  "Variant": "line-up",
+  "Variant": "line-up-short",
   "Invite Status": "Invited"
  },
  {
@@ -152,7 +152,7 @@
   "Code Owner": "Diego",
   "Invite Code": "999999",
   "Invite Token": "ap7rsp9plj8p4hzgdpdufpqpofp3tu",
-  "Variant": "line-up",
+  "Variant": "line-up-short",
   "Invite Status": "Invited"
  },
  {
@@ -164,7 +164,7 @@
   "Code Owner": "Diego",
   "Invite Code": "CTX-8A74592559",
   "Invite Token": "am0jyp3lb1xzr9pdvzp3zijhe9hqxe",
-  "Variant": "line-up",
+  "Variant": "line-up-short",
   "Invite Status": "Invite not sent"
  },
  {
@@ -176,7 +176,7 @@
   "Code Owner": "Andres",
   "Invite Code": "CTX-8A74592559",
   "Invite Token": "dphc4zjgu6279efxv0ru2hm47pr8or",
-  "Variant": "line-up",
+  "Variant": "line-up-short",
   "Invite Status": "Invite not sent"
  },
  {
@@ -190,5 +190,17 @@
   "Invite Token": "asrajwy5h6w49u6f9yilvq3dxh7zct",
   "Variant": "line-up-short",
   "Invite Status": "Invite not sent"
+ },
+ {
+  "Full Name": "Mockname Mocksurname Uno",
+  "First Name": "Mockname",
+  "Last Name": "Mocksurname Uno",
+  "Title": "Head of Nothing",
+  "Org": "Mock Industries",
+  "Code Owner": "Sebastian",
+  "Invite Code": "71756",
+  "Invite Token": "XcLN2_U8t9pBYo-IW1_CncqjIoYyqrd2DG_4JsWSFAs",
+  "Variant": "line-up-short",
+  "Invite Status": ""
  }
 ]
